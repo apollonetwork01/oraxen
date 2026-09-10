@@ -7,7 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -15,16 +16,20 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Grant execute permission for gradlew
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build -x test --no-daemon
+      - name: Build Oraxen Jar
+        run: ./gradlew reobfJar shadowJar --no-daemon --no-build-cache -x test
 
-      - name: Upload JAR
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Oraxen-JAR
+          name: Oraxen-Plugin
           path: |
             build/libs/*.jar
-            */build/libs/*.jar
+            !build/libs/*-dev*.jar
+            !build/libs/*-paper*.jar

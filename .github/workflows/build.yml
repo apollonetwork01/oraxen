@@ -10,17 +10,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 25
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '25'
-          distribution: 'oracle'
+          java-version: '21'
+          distribution: 'temurin'
 
-      - name: Make gradlew executable
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build -x test --no-daemon
+      - name: Build JAR with Gradle
+        run: ./gradlew :oraxen:build -x test --no-daemon
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

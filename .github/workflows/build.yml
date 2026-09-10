@@ -16,14 +16,18 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Remove Dead Volmit Dependencies and Java Code
+      - name: Purge Iris References Entirely
         run: |
-          # 1. Remove qualquer mencao a Volmit/Iris nos arquivos de build/configuracao
-          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/volmit/d' {} +
-          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/Iris/d' {} +
+          # 1. Limpa configuracoes Gradle/Toml
+          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/volmit/dI' {} +
+          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/Iris/dI' {} +
 
-          # 2. Deleta as classes Java do Iris que nao compilam sem o JAR do Iris
+          # 2. Apaga a pasta de codigo do Iris
           rm -rf src/main/java/io/th0rgal/oraxen/compatibilities/provided/iris
+
+          # 3. Remove os imports e chamadas do Iris nos gerenciadores Java
+          find src/ -type f -name "*.java" -exec sed -i '/io.th0rgal.oraxen.compatibilities.provided.iris/d' {} +
+          find src/ -type f -name "*.java" -exec sed -i '/IrisCompatibility/d' {} +
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew

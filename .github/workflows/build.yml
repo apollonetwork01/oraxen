@@ -19,8 +19,9 @@ jobs:
       - name: Purge Iris References Entirely
         run: |
           # 1. Limpa configuracoes Gradle/Toml
-          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/volmit/dI' {} +
-          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/Iris/dI' {} +
+          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/volmit/d' {} +
+          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/iris/d' {} +
+          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/Iris/d' {} +
 
           # 2. Apaga a pasta de codigo do Iris
           rm -rf src/main/java/io/th0rgal/oraxen/compatibilities/provided/iris

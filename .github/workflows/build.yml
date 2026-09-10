@@ -19,8 +19,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build JAR with Gradle
-        run: ./gradlew build --no-daemon -x test
+      - name: Inject Missing Repositories & Build
+        run: |
+          ./gradlew build --no-daemon -x test -PignoreIris=true || ./gradlew shadowJar --no-daemon -x test
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

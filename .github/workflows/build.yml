@@ -20,7 +20,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build JAR with Gradle
-        run: ./gradlew :oraxen:build -x test --no-daemon
+        run: ./gradlew build --no-daemon -x test
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

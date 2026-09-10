@@ -16,16 +16,17 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Wipe Dead Volmit Repositories
+      - name: Remove Broken Iris Integration Code
         run: |
           find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/volmit/d' {} +
           find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/Iris/d' {} +
+          rm -rf **/compatibilities/provided/iris
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build JAR
-        run: ./gradlew shadowJar --no-daemon -x test --continue || ./gradlew build --no-daemon -x test --continue
+      - name: Build JAR with Gradle
+        run: ./gradlew build --no-daemon -x test
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

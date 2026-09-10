@@ -16,11 +16,14 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Remove Broken Iris Integration Code
+      - name: Remove Dead Volmit Dependencies and Java Code
         run: |
+          # 1. Remove qualquer mencao a Volmit/Iris nos arquivos de build/configuracao
           find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/volmit/d' {} +
           find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/Iris/d' {} +
-          rm -rf **/compatibilities/provided/iris
+
+          # 2. Deleta as classes Java do Iris que nao compilam sem o JAR do Iris
+          rm -rf src/main/java/io/th0rgal/oraxen/compatibilities/provided/iris
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew

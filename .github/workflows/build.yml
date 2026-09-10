@@ -16,16 +16,16 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Patch Repositories for Iris
+      - name: Wipe Dead Volmit Repositories
         run: |
-          echo "dependencyResolutionManagement { repositories { maven { url = uri(\"https://repo.volmit.com/\") } } }" >> settings.gradle.kts || true
-          echo "repositories { maven { url = uri(\"https://repo.volmit.com/\") } }" >> build.gradle.kts || true
+          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/volmit/d' {} +
+          find . -type f \( -name "*.kts" -o -name "*.gradle" -o -name "*.toml" \) -exec sed -i '/Iris/d' {} +
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build JAR with Gradle
-        run: ./gradlew shadowJar --no-daemon -x test || ./gradlew build --no-daemon -x test
+      - name: Build JAR
+        run: ./gradlew shadowJar --no-daemon -x test --continue || ./gradlew build --no-daemon -x test --continue
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

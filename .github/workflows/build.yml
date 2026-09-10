@@ -16,12 +16,16 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Patch Repositories for Iris
+        run: |
+          echo "dependencyResolutionManagement { repositories { maven { url = uri(\"https://repo.volmit.com/\") } } }" >> settings.gradle.kts || true
+          echo "repositories { maven { url = uri(\"https://repo.volmit.com/\") } }" >> build.gradle.kts || true
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Inject Missing Repositories & Build
-        run: |
-          ./gradlew build --no-daemon -x test -PignoreIris=true || ./gradlew shadowJar --no-daemon -x test
+      - name: Build JAR with Gradle
+        run: ./gradlew shadowJar --no-daemon -x test || ./gradlew build --no-daemon -x test
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
